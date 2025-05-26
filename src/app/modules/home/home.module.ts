@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { HomeComponent } from './home.component';
-import { ApiService } from '../../core/services/api.service';
+import { AuthService } from '../../core/services/auth/auth.service';
 
 @NgModule({
   declarations: [HomeComponent],
@@ -9,6 +9,6 @@ import { ApiService } from '../../core/services/api.service';
     CommonModule
   ],
   exports: [HomeComponent],
-  providers: [ApiService]
+  providers: [AuthService]
 })
 export class HomeModule { }

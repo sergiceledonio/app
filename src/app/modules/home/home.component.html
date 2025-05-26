@@ -7,40 +7,39 @@
   <div class="bg-black/40 backdrop-blur-lg p-8 rounded-xl shadow-2xl w-full max-w-md border border-purple-500/20">
     <div class="flex border-b border-purple-500/30 mb-6">
       <button
-        [class]="!isRegister ? 'text-purple-400 border-b-2 border-purple-400 -mb-0.5' : 'text-purple-200/50'"
+        [class]="!isRegister ? 'text-purple-400 cursor-pointer border-b-2 border-purple-400 -mb-0.5' : 'text-purple-200/50 cursor-pointer'"
         (click)="toggleForm(false)"
         class="flex-1 py-2.5 text-base transition-all duration-300 hover:text-purple-300 font-rubik">
         Iniciar Sesión
       </button>
       <button
-        [class]="isRegister ? 'text-purple-400 border-b-2 border-purple-400 -mb-0.5' : 'text-purple-200/50'"
+        [class]="isRegister ? 'text-purple-400 cursor-pointer border-b-2 border-purple-400 -mb-0.5' : 'text-purple-200/50 cursor-pointer'"
         (click)="toggleForm(true)"
         class="flex-1 py-2.5 text-base transition-all duration-300 hover:text-purple-300 font-rubik">
         Registrarse
       </button>
     </div>
 
-    <form (ngSubmit)="onSubmit()" #loginForm="ngForm">
+    <form *ngIf="!isRegister" (ngSubmit)="onLoginSubmit()" #loginForm="ngForm">
       <div class="mb-5">
-        <label for="email" class="block text-purple-200 font-medium mb-2 font-rubik">Correo Electrónico</label>
+        <label for="email" class="block text-purple-200 font-medium mb-2 font-rubik">Email</label>
         <input
           type="email"
           id="email"
           name="email"
-          [(ngModel)]="user.email"
+          [(ngModel)]="userlogin.email"
           required
-          email
-          placeholder="ejemplo@correo.com"
+          placeholder="Ingresa tu correo electrónico"
           class="w-full px-3 py-2.5 bg-black/30 border border-purple-500/30 rounded-lg text-purple-100 placeholder-purple-300/50 focus:outline-none focus:border-purple-400 focus:ring-1 focus:ring-purple-400 transition-all duration-300 font-rubik">
       </div>
 
-      <div class="mb-6">
+      <div class="mb-5">
         <label for="password" class="block text-purple-200 font-medium mb-2 font-rubik">Contraseña</label>
         <input
           type="password"
           id="password"
           name="password"
-          [(ngModel)]="user.password"
+          [(ngModel)]="userlogin.password"
           required
           placeholder="Ingresa tu contraseña"
           class="w-full px-3 py-2.5 bg-black/30 border border-purple-500/30 rounded-lg text-purple-100 placeholder-purple-300/50 focus:outline-none focus:border-purple-400 focus:ring-1 focus:ring-purple-400 transition-all duration-300 font-rubik">
@@ -50,7 +49,79 @@
         type="submit"
         [disabled]="!loginForm.form.valid"
         class="w-full py-3 bg-gradient-to-r from-purple-600 to-pink-600 text-white rounded-lg font-medium transition-all duration-300 hover:from-purple-500 hover:to-pink-500 disabled:from-gray-600 disabled:to-gray-600 disabled:cursor-not-allowed transform hover:scale-[1.02] active:scale-[0.98] font-rubik">
-        {{ isRegister ? 'Registrarse' : 'Iniciar Sesión' }}
+        Iniciar Sesión
+      </button>
+    </form>
+
+    <form *ngIf="isRegister" (ngSubmit)="onRegisterSubmit()" #registerForm="ngForm">
+      <div class="mb-5">
+        <label for="name" class="block text-purple-200 font-medium mb-2 font-rubik">Nombre Completo</label>
+        <input
+          type="text"
+          id="name"
+          name="name"
+          [(ngModel)]="userregister.name"
+          required
+          placeholder="Ingresa tu nombre completo"
+          class="w-full px-3 py-2.5 bg-black/30 border border-purple-500/30 rounded-lg text-purple-100 placeholder-purple-300/50 focus:outline-none focus:border-purple-400 focus:ring-1 focus:ring-purple-400 transition-all duration-300 font-rubik">
+      </div>
+
+      <div class="mb-5">
+        <label for="email" class="block text-purple-200 font-medium mb-2 font-rubik">Email</label>
+        <input
+          type="email"
+          id="email"
+          name="email"
+          [(ngModel)]="userregister.email"
+          required
+          placeholder="Ingresa tu correo electrónico"
+          class="w-full px-3 py-2.5 bg-black/30 border border-purple-500/30 rounded-lg text-purple-100 placeholder-purple-300/50 focus:outline-none focus:border-purple-400 focus:ring-1 focus:ring-purple-400 transition-all duration-300 font-rubik">
+      </div>
+
+      <div class="mb-5">
+        <label for="password" class="block text-purple-200 font-medium mb-2 font-rubik">Contraseña</label>
+        <input
+          type="password"
+          id="password"
+          name="password"
+          [(ngModel)]="userregister.password"
+          required
+          placeholder="Crea una contraseña segura"
+          class="w-full px-3 py-2.5 bg-black/30 border border-purple-500/30 rounded-lg text-purple-100 placeholder-purple-300/50 focus:outline-none focus:border-purple-400 focus:ring-1 focus:ring-purple-400 transition-all duration-300 font-rubik">
+      </div>
+
+      <div class="mb-5">
+        <label for="phone" class="block text-purple-200 font-medium mb-2 font-rubik">Teléfono</label>
+        <input
+          type="tel"
+          id="phone"
+          name="phone"
+          [(ngModel)]="userregister.phone"
+          required
+          placeholder="Ingresa tu número de teléfono"
+          class="w-full px-3 py-2.5 bg-black/30 border border-purple-500/30 rounded-lg text-purple-100 placeholder-purple-300/50 focus:outline-none focus:border-purple-400 focus:ring-1 focus:ring-purple-400 transition-all duration-300 font-rubik">
+      </div>
+
+      <div class="mb-5">
+        <label for="userType" class="block text-purple-200 font-medium mb-2 font-rubik">Tipo de Usuario</label>
+        <select
+          id="role"
+          name="role"
+          [(ngModel)]="userregister.role"
+          required
+          class="w-full px-3 py-2.5 bg-black/30 border border-purple-500/30 rounded-lg text-purple-100 focus:outline-none focus:border-purple-400 focus:ring-1 focus:ring-purple-400 transition-all duration-300 font-rubik">
+          <option value="" disabled selected>Selecciona tu tipo de usuario</option>
+          <option value="dj">DJ</option>
+          <option value="agency">Agencia</option>
+          <option value="client">Cliente</option>
+        </select>
+      </div>
+
+      <button
+        type="submit"
+        [disabled]="!registerForm.form.valid"
+        class="w-full py-3 bg-gradient-to-r from-purple-600 to-pink-600 text-white rounded-lg font-medium transition-all duration-300 hover:from-purple-500 hover:to-pink-500 disabled:from-gray-600 disabled:to-gray-600 disabled:cursor-not-allowed transform hover:scale-[1.02] active:scale-[0.98] font-rubik">
+        Registrarse
       </button>
     </form>
   </div>
