@@ -3,7 +3,8 @@ import { AuthService } from '../../core/services/auth/auth.service';
 import { CommonModule } from '@angular/common';
 import { HttpClientModule } from '@angular/common/http';
 import { FormsModule } from '@angular/forms';
-
+import { Router } from '@angular/router';
+import { AuthStoreService } from '../../core/services/auth/auth-store.service'
 @Component({
   selector: 'app-home',
   templateUrl: './home.component.html',
@@ -19,44 +20,68 @@ export class HomeComponent {
 
   userregister = {
     name: '',
+    artistic_name: '',
     email: '',
     password: '',
     phone: '',
+    location: '',
     role: '',
-    createdAt: new Date()
   };
 
   isLoggedIn: boolean = false;
-  isRegisterSuccess: boolean = false;
+  isRegisterFailed: boolean = false;
 
-  constructor(private authService: AuthService) {}
+  errorMessage: string = '';
+  successMessage: string = '';
+
+  constructor(private authService: AuthService, private router: Router, private authStore: AuthStoreService) {}
 
   toggleForm(isRegister: boolean) {
     this.isRegister = isRegister;
+    this.isRegisterFailed = false;
+    this.isLoggedIn = false;
+    this.errorMessage = '';
+    this.successMessage = '';
   }
 
   onRegisterSubmit() {
-    // Lógica para inicio de sesión
+    console.log(this.userregister);
     this.authService.register(this.userregister).subscribe(
       (response) => {
-        console.log('Usuario registrado:', response);
-        // Aquí puedes agregar la lógica para redirigir o mostrar mensaje de éxito
+        if (response) {
+          this.toggleForm(false);
+          this.successMessage = 'Usuario registrado correctamente';
+          this.userlogin = {
+            email: response.email,
+            password: response.password
+          };
+        } else {
+          this.isRegisterFailed = true;
+          this.errorMessage = 'Usuario ya registrado';
+        }
       },
       (error) => {
-        console.error('Error en el registro:', error);
-        // Aquí puedes agregar la lógica para mostrar mensaje de error
-    });
+        console.log(error);
+        this.isRegisterFailed = true;
+        this.errorMessage = 'Revisa que los campos estén correctos';
+      }
+    );
   }
 
   onLoginSubmit() {
     this.authService.login(this.userlogin).subscribe(
       (response) => {
-        console.log('Usuario autenticado:', response);
-        // Aquí puedes agregar la lógica para redirigir o mostrar mensaje de éxito
+        if (response) {
+          this.authStore.setUser(response);
+          this.isLoggedIn = true;
+          this.router.navigate(['/dashboard']);
+        } else {
+          this.errorMessage = 'Usuario o contraseña incorrectos';
+        }
       },
       (error) => {
-        console.error('Error en la autenticación:', error);
-        // Aquí puedes agregar la lógica para mostrar mensaje de error
+        console.log(error);
+        this.isLoggedIn = false;
     });
   }
 }

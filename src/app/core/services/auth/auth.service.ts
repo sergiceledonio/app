@@ -12,13 +12,11 @@ export class AuthService {
 
   register(user: any): Observable<any> {
     const response = this.http.post(`${this.apiUrl}/auth/register`, user);
-    console.log(response);
     return response;
   }
 
   login(user: any): Observable<any> {
     const response = this.http.post(`${this.apiUrl}/auth/login`, user);
-    console.log(response);
     return response;
   }
 }

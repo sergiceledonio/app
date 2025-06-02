@@ -5,6 +5,7 @@ import { AppComponent } from './app.component';
 import { AuthService } from './core/services/auth/auth.service';
 import { AppRoutingModule } from './app-routing.module';
 import { RouterModule } from '@angular/router';
+import { DashboardModule } from './modules/dashboard/dashboard/dashboard.module';
 @NgModule({
   declarations: [AppComponent],
   imports: [
@@ -12,6 +13,7 @@ import { RouterModule } from '@angular/router';
     HomeModule,
     AppRoutingModule,
     RouterModule,
+    DashboardModule
   ],
   providers: [AuthService],
   bootstrap: [AppComponent],
