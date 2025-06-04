@@ -22,15 +22,37 @@ export class AuthStoreService {
 
   public user$: Observable<LoggedUser | null> = this.userSubject.asObservable();
 
+  constructor() {
+    if (typeof window !== 'undefined' && window.localStorage) {
+      const storedUser = localStorage.getItem('user');
+      if (storedUser) {
+        this.userSubject.next(JSON.parse(storedUser));
+      }
+    }
+  }
+
   get user(): LoggedUser | null {
     return this.userSubject.value;
   }
 
   setUser(user: LoggedUser): void {
     this.userSubject.next(user);
+    if (typeof window !== 'undefined' && window.localStorage) {
+      localStorage.setItem('user', JSON.stringify(user));
+    }
   }
 
   clear(): void {
     this.userSubject.next(null);
+    if (typeof window !== 'undefined' && window.localStorage) {
+      localStorage.removeItem('user');
+    }
+  }
+
+  loadFromStorage() {
+    const user = localStorage.getItem('loggedUser');
+    if (user) {
+      this.userSubject.next(JSON.parse(user));
+    }
   }
 }

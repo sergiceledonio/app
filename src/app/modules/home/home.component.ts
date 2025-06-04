@@ -5,13 +5,14 @@ import { HttpClientModule } from '@angular/common/http';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { AuthStoreService } from '../../core/services/auth/auth-store.service'
+import { OnInit } from '@angular/core';
 @Component({
   selector: 'app-home',
   templateUrl: './home.component.html',
   imports: [CommonModule, HttpClientModule, FormsModule],
   providers: [AuthService]
 })
-export class HomeComponent {
+export class HomeComponent implements OnInit{
   isRegister: boolean = false;
   userlogin = {
     email: '',
@@ -36,6 +37,23 @@ export class HomeComponent {
 
   constructor(private authService: AuthService, private router: Router, private authStore: AuthStoreService) {}
 
+  ngOnInit(): void {
+    this.userlogin = {
+      email: '',
+      password: ''
+    };
+
+    this.userregister = {
+      name: '',
+      artistic_name: '',
+      email: '',
+      password: '',
+      phone: '',
+      location: '',
+      role: '',
+    };
+  }
+
   toggleForm(isRegister: boolean) {
     this.isRegister = isRegister;
     this.isRegisterFailed = false;
@@ -45,7 +63,6 @@ export class HomeComponent {
   }
 
   onRegisterSubmit() {
-    console.log(this.userregister);
     this.authService.register(this.userregister).subscribe(
       (response) => {
         if (response) {
