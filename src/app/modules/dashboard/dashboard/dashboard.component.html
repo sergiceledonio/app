@@ -4,9 +4,11 @@
     <h2 class="text-3xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-pink-600 mb-4 font-rubik">
       ¡Bienvenido {{ userLogged?.name }}!
     </h2>
-    <p class="text-purple-200 font-rubik">
-      Aquí encontrarás todo lo que necesitas para gestionar tus eventos y servicios.
-    </p>
+    <button
+      (click)="openAddEventModal()"
+      class="bg-purple-500/20 hover:bg-purple-500/30 text-purple-400 font-rubik py-2 px-4 rounded-lg transition-all duration-300 border border-purple-500/20 hover:border-purple-400/40 cursor-pointer">
+      Crear Evento
+    </button>
   </div>
 
   <!-- Quick Actions Grid -->
@@ -24,7 +26,7 @@
       </div>
 
       <div *ngIf="!loading && events.length > 0" class="space-y-4 max-h-[400px] overflow-y-auto">
-        <div *ngFor="let event of events" class="bg-black/20 rounded-lg p-6 hover:bg-black/30 transition-all duration-300 border border-purple-500/20 hover:border-purple-400/40 cursor-pointer">
+        <div *ngFor="let event of events" (click)="openEventModal(event)" class="bg-black/20 rounded-lg p-6 hover:bg-black/30 transition-all duration-300 border border-purple-500/20 hover:border-purple-400/40 cursor-pointer">
           <div class="flex flex-col">
             <h3 class="text-xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-pink-600 mb-3">{{ event.name }}</h3>
             <div class="space-y-1 text-sm">
@@ -84,3 +86,64 @@
 
   <button (click)="logout()">Cerrar sesión</button>
 </div>
+
+<!-- Modal -->
+<div *ngIf="showModal" class="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50">
+  <div class="bg-black/90 border border-purple-500/20 rounded-xl p-8 max-w-2xl w-full mx-4 relative">
+    <!-- Close button -->
+    <button (click)="closeModal()" class="absolute top-4 right-4 text-purple-400 hover:text-purple-300">
+      <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+      </svg>
+    </button>
+
+    <!-- Modal content -->
+    <div *ngIf="selectedEvent" class="space-y-6">
+      <h2 class="text-3xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-pink-600 mb-4 font-rubik">
+        {{ selectedEvent.name }}
+      </h2>
+
+      <div class="space-y-4">
+        <div class="flex items-center space-x-4">
+          <span class="text-purple-200 font-rubik">Fecha:</span>
+          <span class="text-purple-300">{{ selectedEvent.date | date:'dd/MM/yyyy' }}</span>
+        </div>
+
+        <div class="flex items-center space-x-4">
+          <span class="text-purple-200 font-rubik">Horario:</span>
+          <span class="text-purple-300">{{ selectedEvent.start }} - {{ selectedEvent.end }}</span>
+        </div>
+
+        <div class="flex items-center space-x-4">
+          <span class="text-purple-200 font-rubik">Dirección:</span>
+          <span class="text-purple-300">{{ selectedEvent.address }}</span>
+        </div>
+
+        <div class="flex items-center space-x-4">
+          <span class="text-purple-200 font-rubik">Ciudad:</span>
+          <span class="text-purple-300">{{ selectedEvent.city }}</span>
+        </div>
+      </div>
+
+      <!-- Botón de eliminar -->
+      <div class="pt-6 border-t border-purple-500/20">
+        <button
+          (click)="deleteEvent(selectedEvent.id)"
+          class="w-full bg-red-500/20 hover:bg-red-500/30 text-red-400 font-rubik py-3 px-6 rounded-lg transition-all duration-300 border border-red-500/20 hover:border-red-400/40 flex items-center justify-center space-x-2">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+          </svg>
+          <span>Eliminar Evento</span>
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Add Event Modal -->
+<app-add-event-modal *ngIf="userLogged"
+  [isOpen]="showAddEventModal"
+  [userId]="userLogged.id"
+  (closeModal)="closeAddEventModal()"
+  (eventCreated)="onEventCreated()">
+</app-add-event-modal>

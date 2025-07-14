@@ -1,4 +1,5 @@
-import { Injectable } from '@angular/core';
+import { Injectable, Inject, PLATFORM_ID } from '@angular/core';
+import { isPlatformBrowser } from '@angular/common';
 import { BehaviorSubject, Observable } from 'rxjs';
 
 export interface LoggedUser {
@@ -19,11 +20,13 @@ export interface LoggedUser {
 })
 export class AuthStoreService {
   private userSubject = new BehaviorSubject<LoggedUser | null>(null);
-
   public user$: Observable<LoggedUser | null> = this.userSubject.asObservable();
+  private isBrowser: boolean;
 
-  constructor() {
-    if (typeof window !== 'undefined' && window.localStorage) {
+  constructor(@Inject(PLATFORM_ID) private platformId: Object) {
+    this.isBrowser = isPlatformBrowser(platformId);
+
+    if (this.isBrowser) {
       const storedUser = localStorage.getItem('user');
       if (storedUser) {
         this.userSubject.next(JSON.parse(storedUser));
@@ -37,22 +40,24 @@ export class AuthStoreService {
 
   setUser(user: LoggedUser): void {
     this.userSubject.next(user);
-    if (typeof window !== 'undefined' && window.localStorage) {
+    if (this.isBrowser) {
       localStorage.setItem('user', JSON.stringify(user));
     }
   }
 
   clear(): void {
     this.userSubject.next(null);
-    if (typeof window !== 'undefined' && window.localStorage) {
+    if (this.isBrowser) {
       localStorage.removeItem('user');
     }
   }
 
-  loadFromStorage() {
-    const user = localStorage.getItem('loggedUser');
-    if (user) {
-      this.userSubject.next(JSON.parse(user));
+  loadFromStorage(): void {
+    if (this.isBrowser) {
+      const user = localStorage.getItem('user');
+      if (user) {
+        this.userSubject.next(JSON.parse(user));
+      }
     }
   }
 }
