@@ -5,6 +5,12 @@ import { Router } from '@angular/router';
 import { HttpClientModule, HttpClient } from '@angular/common/http';
 import { NavigationStart } from '@angular/router';
 import { AddEventModalComponent } from './add-event-modal/add-event-modal.component';
+import { HomeTabComponent } from './home-tab/home-tab.component';
+import { EventosTabComponent } from './eventos-tab/eventos-tab.component';
+import { CalendarioTabComponent } from './calendario-tab/calendario-tab.component';
+import { FinanzasTabComponent } from './finanzas-tab/finanzas-tab.component';
+import { ClientesTabComponent } from './clientes-tab/clientes-tab.component';
+import { SolicitudesTabComponent } from './solicitudes-tab/solicitudes-tab.component';
 
 interface Event {
   id: number;
@@ -14,12 +20,23 @@ interface Event {
   end: string;
   address: string;
   city: string;
+  type: string;
 }
 
 @Component({
   selector: 'app-dashboard',
   standalone: true,
-  imports: [CommonModule, HttpClientModule, AddEventModalComponent],
+  imports: [
+    CommonModule,
+    HttpClientModule,
+    AddEventModalComponent,
+    HomeTabComponent,
+    EventosTabComponent,
+    CalendarioTabComponent,
+    FinanzasTabComponent,
+    ClientesTabComponent,
+    SolicitudesTabComponent
+  ],
   templateUrl: './dashboard.component.html'
 })
 export class DashboardComponent implements OnInit {
@@ -45,25 +62,77 @@ export class DashboardComponent implements OnInit {
   selectedEvent: Event | null = null;
   showModal: boolean = false;
   showAddEventModal: boolean = false;
+  activeTab: string = 'home'; // Tab activo por defecto
+
+  // Función para obtener el emoticono según el tipo de evento
+  getEventEmoji(type: string): string {
+    switch (type?.toLowerCase()) {
+      case 'residencia':
+        return '🏠';
+      case 'discoteca':
+        return '🎵';
+      case 'evento':
+        return '🎉';
+      case 'otro':
+        return '📅';
+      default:
+        return '📅';
+    }
+  }
 
   ngOnInit() {
     this.userLogged = this.authStore.user;
     this.loadEvents();
   }
 
+  // Método para cambiar el tab activo
+  setActiveTab(tabName: string) {
+    this.activeTab = tabName;
+  }
+
+  // Método para obtener las clases CSS del tab
+  getTabClasses(tabName: string): string {
+    const isActive = this.activeTab === tabName;
+    const baseClasses = 'py-2 px-4 text-sm font-medium rounded-xl border transition-all duration-300 font-rubik flex items-center space-x-2 cursor-pointer';
+
+    if (isActive) {
+      return `${baseClasses} text-indigo-600 bg-indigo-100 border-indigo-200 hover:bg-indigo-200`;
+    } else {
+      return `${baseClasses} text-gray-600 bg-gray-100 border-gray-200 hover:bg-gray-200 hover:text-gray-800`;
+    }
+  }
+
+  // Método para obtener el componente activo según el tab
+  getActiveComponent(): any {
+    switch (this.activeTab) {
+      case 'eventos':
+        return EventosTabComponent;
+      case 'calendario':
+        return CalendarioTabComponent;
+      case 'finanzas':
+        return FinanzasTabComponent;
+      case 'clientes':
+        return ClientesTabComponent;
+      case 'solicitudes':
+        return SolicitudesTabComponent;
+      default:
+        this.activeTab = 'home';
+    }
+  }
+
   loadEvents() {
     if (this.userLogged) {
-        this.http.post<Event[]>('http://localhost:3000/events/get-events-by-user', { id: this.userLogged.id })
-          .subscribe({
-          next: (events) => {
-              this.events = events;
-              this.loading = false;
-          },
-          error: (error) => {
-            console.error('Error cargando eventos:', error);
+      this.http.post<Event[]>('http://localhost:3000/events/get-events-by-user', { id: this.userLogged.id, fromDate: new Date().toISOString() })
+        .subscribe({
+        next: (events) => {
+            this.events = events;
             this.loading = false;
-          }
-        });
+        },
+        error: (error) => {
+          console.error('Error cargando eventos:', error);
+          this.loading = false;
+        }
+      });
     }
   }
 
@@ -83,21 +152,6 @@ export class DashboardComponent implements OnInit {
     this.showModal = false;
     this.selectedEvent = null;
     this.toggleBodyScroll(false);
-  }
-
-  deleteEvent(eventId: number) {
-    if (confirm('¿Estás seguro de que deseas eliminar este evento?')) {
-      this.http.delete(`http://localhost:3000/events/delete-event`, { body: { id: eventId } })
-        .subscribe({
-          next: () => {
-            this.events = this.events.filter(event => event.id !== eventId);
-            this.closeModal();
-          },
-          error: (error) => {
-            console.error('Error al eliminar el evento:', error);
-          }
-        });
-    }
   }
 
   openAddEventModal() {

@@ -1,149 +1,115 @@
-<div class="p-6">
-  <!-- Welcome Section -->
-  <div class="bg-black/40 backdrop-blur-lg rounded-xl p-8 mb-8 border border-purple-500/20">
-    <h2 class="text-3xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-pink-600 mb-4 font-rubik">
-      ¡Bienvenido {{ userLogged?.name }}!
-    </h2>
-    <button
-      (click)="openAddEventModal()"
-      class="bg-purple-500/20 hover:bg-purple-500/30 text-purple-400 font-rubik py-2 px-4 rounded-lg transition-all duration-300 border border-purple-500/20 hover:border-purple-400/40 cursor-pointer">
-      Crear Evento
-    </button>
-  </div>
+<div class="min-h-screen bg-gradient-to-br from-blue-50 via-indigo-100 to-purple-100">
+  <div class="p-6">
+    <!-- Welcome Section -->
+    <div class="bg-white/90 backdrop-blur-lg rounded-xl p-6 mb-6 border border-indigo-200 shadow-lg">
+      <div class="flex justify-between items-center">
+        <div class="flex-1">
+          <h2 class="text-2xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-indigo-600 to-purple-600 mb-4 font-rubik">
+            ¡Bienvenido {{ userLogged?.name }}!
+          </h2>
 
-  <!-- Quick Actions Grid -->
-  <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
-    <!-- Eventos -->
-    <div class="bg-black/40 backdrop-blur-lg rounded-xl p-6 border border-purple-500/20 hover:border-purple-400/40 transition-all duration-300">
-      <h3 class="text-xl font-bold text-purple-200 mb-4 font-rubik">Próximos eventos</h3>
+          <!-- Tabs -->
+          <div class="flex space-x-1 justify-start">
+            <button
+              [class]="getTabClasses('home')"
+              (click)="setActiveTab('home')">
+              <span class="text-lg">🏠</span>
+            </button>
+            <button
+              [class]="getTabClasses('eventos')"
+              (click)="setActiveTab('eventos')">
+              <span class="text-lg">🎉</span>
+              <span>Eventos</span>
+            </button>
+            <button
+              [class]="getTabClasses('calendario')"
+              (click)="setActiveTab('calendario')">
+              <span class="text-lg">📅</span>
+              <span>Calendario</span>
+            </button>
+            <button
+              [class]="getTabClasses('finanzas')"
+              (click)="setActiveTab('finanzas')">
+              <span class="text-lg">💰</span>
+              <span>Finanzas</span>
+            </button>
+            <button
+              [class]="getTabClasses('clientes')"
+              (click)="setActiveTab('clientes')">
+              <span class="text-lg">👥</span>
+              <span>Clientes</span>
+            </button>
+            <button
+              [class]="getTabClasses('solicitudes')"
+              (click)="setActiveTab('solicitudes')">
+              <span class="text-lg">💬</span>
+              <span>Solicitudes</span>
+            </button>
+          </div>
+        </div>
 
-      <div *ngIf="loading" class="flex justify-center items-center py-4">
-        <div class="animate-spin rounded-full h-8 w-8 border-b-2 border-purple-400"></div>
+        <!-- User Profile Button -->
+        <button class="w-12 h-12 bg-indigo-100 hover:bg-indigo-200 text-indigo-600 rounded-full border border-indigo-200 transition-all duration-300 flex items-center justify-center cursor-pointer">
+          <span class="text-xl">👤</span>
+        </button>
       </div>
+    </div>
 
-      <div *ngIf="!loading && events.length === 0" class="text-purple-300/80 font-rubik text-center py-4">
-        No tienes eventos programados
-      </div>
+    <!-- Quick Actions Grid -->
+    <div *ngIf="activeTab === 'home'" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mb-6">
+      <!-- Eventos -->
+      <div class="bg-white/90 backdrop-blur-lg rounded-xl p-4 border border-indigo-200 shadow-lg hover:border-indigo-300 transition-all duration-300 flex flex-col">
+        <div class="flex justify-between items-center mb-3">
+          <h3 class="text-lg font-bold text-gray-800 font-rubik">🔜 Próximos eventos</h3>
+        </div>
 
-      <div *ngIf="!loading && events.length > 0" class="space-y-4 max-h-[400px] overflow-y-auto">
-        <div *ngFor="let event of events" (click)="openEventModal(event)" class="bg-black/20 rounded-lg p-6 hover:bg-black/30 transition-all duration-300 border border-purple-500/20 hover:border-purple-400/40 cursor-pointer">
-          <div class="flex flex-col">
-            <h3 class="text-xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-pink-600 mb-3">{{ event.name }}</h3>
-            <div class="space-y-1 text-sm">
-              <div class="flex items-center space-x-4">
-                <span class="text-purple-200">{{ event.date | date:'dd/MM/yyyy' }}</span>
-                <span class="text-purple-300/80">|</span>
-                <span class="text-purple-200">{{ event.start }}</span>
-                <span class="text-purple-300/80">-</span>
-                <span class="text-purple-200">{{ event.end }}</span>
+        <div *ngIf="loading" class="flex justify-center items-center py-4 flex-1">
+          <div class="animate-spin rounded-full h-8 w-8 border-b-2 border-indigo-500"></div>
+        </div>
+
+        <div *ngIf="!loading && events.length === 0" class="text-gray-600 font-rubik text-center py-4 flex-1 flex items-center justify-center">
+          No tienes eventos programados
+        </div>
+
+        <div *ngIf="!loading && events.length > 0" class="space-y-3 max-h-[400px] overflow-y-auto">
+          <div *ngFor="let event of events" (click)="openEventModal(event)"
+               class="flex items-center justify-between p-4 bg-gray-50 rounded-lg border-l-4 border-l-indigo-500 hover:bg-gray-100 transition-all duration-300 cursor-pointer">
+            <div class="flex items-center space-x-3">
+              <div class="text-2xl">
+                {{ getEventEmoji(event.type) }}
               </div>
-              <div class="flex items-center space-x-2">
-                <span class="text-purple-200">{{ event.address }}</span>
-              </div>
-              <div class="flex items-center space-x-2">
-                <span class="text-purple-200">{{ event.city }}</span>
+              <div>
+                <p class="font-semibold text-gray-800 font-rubik">{{ event.name }}</p>
+                <p class="text-sm text-gray-600 font-rubik">{{ event.date | date:'dd/MM/yyyy' }} • {{ event.start }} - {{ event.end }}</p>
+                <p class="text-sm text-gray-600 font-rubik">{{ event.address }}, {{ event.city }}</p>
               </div>
             </div>
           </div>
         </div>
       </div>
-    </div>
 
-    <!-- Calendario -->
-    <div class="bg-black/40 backdrop-blur-lg rounded-xl p-6 border border-purple-500/20 hover:border-purple-400/40 transition-all duration-300 cursor-pointer">
-      <h3 class="text-xl font-bold text-purple-200 mb-2 font-rubik">Calendario</h3>
-      <p class="text-purple-300/80 font-rubik">Visualiza y organiza tu agenda</p>
-    </div>
-
-    <!-- Mensajes -->
-    <div class="bg-black/40 backdrop-blur-lg rounded-xl p-6 border border-purple-500/20 hover:border-purple-400/40 transition-all duration-300 cursor-pointer">
-      <h3 class="text-xl font-bold text-purple-200 mb-2 font-rubik">Mensajes</h3>
-      <p class="text-purple-300/80 font-rubik">Comunícate con otros usuarios</p>
-    </div>
-  </div>
-
-  <!-- Recent Activity Section -->
-  <div class="bg-black/40 backdrop-blur-lg rounded-xl p-8 border border-purple-500/20">
-    <h2 class="text-2xl font-bold text-purple-200 mb-6 font-rubik">Actividad Reciente</h2>
-    <div class="space-y-4">
-      <!-- Activity Item -->
-      <div class="flex items-center space-x-4 p-4 bg-black/20 rounded-lg">
-        <div class="w-2 h-2 bg-purple-400 rounded-full"></div>
-        <p class="text-purple-200 font-rubik">Nuevo evento programado para el 15 de Mayo</p>
+      <!-- Calendario -->
+      <div class="bg-white/90 backdrop-blur-lg rounded-xl p-4 border border-indigo-200 shadow-lg hover:border-indigo-300 transition-all duration-300 cursor-pointer">
+        <h3 class="text-lg font-bold text-gray-800 mb-2 font-rubik">📅 Densidad de Eventos</h3>
+        <p class="text-gray-600 font-rubik text-sm">Visualiza y organiza tu agenda</p>
       </div>
-      <!-- Activity Item -->
-      <div class="flex items-center space-x-4 p-4 bg-black/20 rounded-lg">
-        <div class="w-2 h-2 bg-purple-400 rounded-full"></div>
-        <p class="text-purple-200 font-rubik">Mensaje recibido de Agencia XYZ</p>
-      </div>
-      <!-- Activity Item -->
-      <div class="flex items-center space-x-4 p-4 bg-black/20 rounded-lg">
-        <div class="w-2 h-2 bg-purple-400 rounded-full"></div>
-        <p class="text-purple-200 font-rubik">Actualización de perfil completada</p>
+
+      <!-- Mensajes -->
+      <div class="bg-white/90 backdrop-blur-lg rounded-xl p-4 border border-indigo-200 shadow-lg hover:border-indigo-300 transition-all duration-300 cursor-pointer">
+        <h3 class="text-lg font-bold text-gray-800 mb-2 font-rubik">🗺️ Mapa de Eventos</h3>
+        <p class="text-gray-600 font-rubik text-sm">Comunícate con otros usuarios</p>
       </div>
     </div>
-  </div>
 
-  <button (click)="logout()">Cerrar sesión</button>
-</div>
+    <!-- Dynamic Content Area -->
+    <div *ngIf="activeTab !== 'home'">
+      <ng-container *ngComponentOutlet="getActiveComponent()"></ng-container>
+    </div>
 
-<!-- Modal -->
-<div *ngIf="showModal" class="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50">
-  <div class="bg-black/90 border border-purple-500/20 rounded-xl p-8 max-w-2xl w-full mx-4 relative">
-    <!-- Close button -->
-    <button (click)="closeModal()" class="absolute top-4 right-4 text-purple-400 hover:text-purple-300">
-      <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-      </svg>
-    </button>
-
-    <!-- Modal content -->
-    <div *ngIf="selectedEvent" class="space-y-6">
-      <h2 class="text-3xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-pink-600 mb-4 font-rubik">
-        {{ selectedEvent.name }}
-      </h2>
-
-      <div class="space-y-4">
-        <div class="flex items-center space-x-4">
-          <span class="text-purple-200 font-rubik">Fecha:</span>
-          <span class="text-purple-300">{{ selectedEvent.date | date:'dd/MM/yyyy' }}</span>
-        </div>
-
-        <div class="flex items-center space-x-4">
-          <span class="text-purple-200 font-rubik">Horario:</span>
-          <span class="text-purple-300">{{ selectedEvent.start }} - {{ selectedEvent.end }}</span>
-        </div>
-
-        <div class="flex items-center space-x-4">
-          <span class="text-purple-200 font-rubik">Dirección:</span>
-          <span class="text-purple-300">{{ selectedEvent.address }}</span>
-        </div>
-
-        <div class="flex items-center space-x-4">
-          <span class="text-purple-200 font-rubik">Ciudad:</span>
-          <span class="text-purple-300">{{ selectedEvent.city }}</span>
-        </div>
-      </div>
-
-      <!-- Botón de eliminar -->
-      <div class="pt-6 border-t border-purple-500/20">
-        <button
-          (click)="deleteEvent(selectedEvent.id)"
-          class="w-full bg-red-500/20 hover:bg-red-500/30 text-red-400 font-rubik py-3 px-6 rounded-lg transition-all duration-300 border border-red-500/20 hover:border-red-400/40 flex items-center justify-center space-x-2">
-          <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
-          </svg>
-          <span>Eliminar Evento</span>
-        </button>
-      </div>
+    <div class="flex justify-between items-center mt-6">
+      <button (click)="logout()" class="bg-red-500/20 hover:bg-red-500/30 text-red-600 font-rubik py-2 px-4 rounded-lg transition-all duration-300 border border-red-300 hover:border-red-400">
+        Cerrar sesión
+      </button>
     </div>
   </div>
 </div>
-
-<!-- Add Event Modal -->
-<app-add-event-modal *ngIf="userLogged"
-  [isOpen]="showAddEventModal"
-  [userId]="userLogged.id"
-  (closeModal)="closeAddEventModal()"
-  (eventCreated)="onEventCreated()">
-</app-add-event-modal>

@@ -1,28 +1,28 @@
-<div class="min-h-screen flex flex-col items-center justify-center bg-gradient-to-br from-purple-900 via-black to-indigo-900 p-5">
+<div class="min-h-screen flex flex-col items-center justify-center bg-gradient-to-br from-blue-50 via-indigo-100 to-purple-100 p-5">
   <div class="text-center mb-10">
-    <h1 class="text-5xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-pink-600 mb-2 animate-pulse">¡Bienvenido a APP Intramedia!</h1>
-    <p class="text-xl text-purple-200 font-rubik">Tu plataforma de gestión de DJs</p>
+    <h1 class="text-5xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-indigo-600 to-purple-600 mb-2 animate-pulse">¡Bienvenido a APP Intramedia!</h1>
+    <p class="text-xl text-gray-700 font-rubik">Tu plataforma de gestión de DJs</p>
   </div>
 
-  <div class="bg-black/40 backdrop-blur-lg p-8 rounded-xl shadow-2xl w-full max-w-md border border-purple-500/20">
-    <div class="flex border-b border-purple-500/30 mb-6">
+  <div class="bg-white/90 backdrop-blur-lg p-8 rounded-xl shadow-xl w-full max-w-2xl border border-indigo-200">
+    <div class="flex border-b border-indigo-300 mb-6">
       <button
-        [class]="!isRegister ? 'text-purple-400 cursor-pointer border-b-2 border-purple-400 -mb-0.5' : 'text-purple-200/50 cursor-pointer'"
+        [class]="!isRegister ? 'text-indigo-600 cursor-pointer border-b-2 border-indigo-600 -mb-0.5' : 'text-gray-500 cursor-pointer'"
         (click)="toggleForm(false)"
-        class="flex-1 py-2.5 text-base transition-all duration-300 hover:text-purple-300 font-rubik">
+        class="flex-1 py-2.5 text-base transition-all duration-300 hover:text-indigo-500 font-rubik">
         Iniciar Sesión
       </button>
       <button
-        [class]="isRegister ? 'text-purple-400 cursor-pointer border-b-2 border-purple-400 -mb-0.5' : 'text-purple-200/50 cursor-pointer'"
+        [class]="isRegister ? 'text-indigo-600 cursor-pointer border-b-2 border-indigo-600 -mb-0.5' : 'text-gray-500 cursor-pointer'"
         (click)="toggleForm(true)"
-        class="flex-1 py-2.5 text-base transition-all duration-300 hover:text-purple-300 font-rubik">
+        class="flex-1 py-2.5 text-base transition-all duration-300 hover:text-indigo-500 font-rubik">
         Registrarse
       </button>
     </div>
 
     <form *ngIf="!isRegister" (ngSubmit)="onLoginSubmit()" #loginForm="ngForm">
       <div class="mb-5">
-        <label for="email" class="block text-purple-200 font-medium mb-2 font-rubik">Email</label>
+        <label for="email" class="block text-gray-700 font-medium mb-2 font-rubik">Email</label>
         <input
           type="email"
           id="email"
@@ -30,11 +30,11 @@
           [(ngModel)]="userlogin.email"
           required
           placeholder="Ingresa tu correo electrónico"
-          class="w-full px-3 py-2.5 bg-black/30 border border-purple-500/30 rounded-lg text-purple-100 placeholder-purple-300/50 focus:outline-none focus:border-purple-400 focus:ring-1 focus:ring-purple-400 transition-all duration-300 font-rubik">
+          class="w-full px-3 py-2.5 bg-gray-50 border border-gray-300 rounded-lg text-gray-800 placeholder-gray-500 focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 transition-all duration-300 font-rubik">
       </div>
 
       <div class="mb-5">
-        <label for="password" class="block text-purple-200 font-medium mb-2 font-rubik">Contraseña</label>
+        <label for="password" class="block text-gray-700 font-medium mb-2 font-rubik">Contraseña</label>
         <input
           type="password"
           id="password"
@@ -42,51 +42,52 @@
           [(ngModel)]="userlogin.password"
           required
           placeholder="Ingresa tu contraseña"
-          class="w-full px-3 py-2.5 bg-black/30 border border-purple-500/30 rounded-lg text-purple-100 placeholder-purple-300/50 focus:outline-none focus:border-purple-400 focus:ring-1 focus:ring-purple-400 transition-all duration-300 font-rubik">
+          class="w-full px-3 py-2.5 bg-gray-50 border border-gray-300 rounded-lg text-gray-800 placeholder-gray-500 focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 transition-all duration-300 font-rubik">
       </div>
 
       <button
         type="submit"
         [disabled]="!loginForm.form.valid"
-        class="w-full py-3 bg-gradient-to-r from-purple-600 to-pink-600 text-white rounded-lg font-medium transition-all duration-300 hover:from-purple-500 hover:to-pink-500 disabled:from-gray-600 disabled:to-gray-600 disabled:cursor-not-allowed transform hover:scale-[1.02] active:scale-[0.98] font-rubik">
+        class="w-full py-3 bg-gradient-to-r from-indigo-600 to-purple-600 text-white rounded-lg font-medium transition-all duration-300 hover:from-indigo-500 hover:to-purple-500 disabled:from-gray-400 disabled:to-gray-400 disabled:cursor-not-allowed transform hover:scale-[1.02] active:scale-[0.98] font-rubik">
         Iniciar Sesión
       </button>
       <div class="mt-4 text-center">
-        <span *ngIf="isLoggedIn || !isRegisterFailed && successMessage" class="text-green-400 font-rubik text-sm bg-green-900/20 px-4 py-2 rounded-lg border border-green-500/20">
+        <span *ngIf="isLoggedIn || !isRegisterFailed && successMessage" class="text-green-600 font-rubik text-sm bg-green-100 px-4 py-2 rounded-lg border border-green-200">
           {{ successMessage }}
         </span>
-        <span *ngIf="!isLoggedIn && errorMessage" class="text-red-400 font-rubik text-sm bg-red-900/20 px-4 py-2 rounded-lg border border-red-500/20">
+        <span *ngIf="!isLoggedIn && errorMessage" class="text-red-600 font-rubik text-sm bg-red-100 px-4 py-2 rounded-lg border border-red-200">
           {{ errorMessage }}
         </span>
       </div>
     </form>
 
     <form *ngIf="isRegister" (ngSubmit)="onRegisterSubmit()" #registerForm="ngForm">
-      <div class="mb-5">
-        <label for="name" class="block text-purple-200 font-medium mb-2 font-rubik">Nombre Completo</label>
-        <input
-          type="text"
-          id="name"
-          name="name"
-          [(ngModel)]="userregister.name"
-          required
-          placeholder="Ingresa tu nombre completo"
-          class="w-full px-3 py-2.5 bg-black/30 border border-purple-500/30 rounded-lg text-purple-100 placeholder-purple-300/50 focus:outline-none focus:border-purple-400 focus:ring-1 focus:ring-purple-400 transition-all duration-300 font-rubik">
+      <div class="grid grid-cols-2 gap-4 mb-5">
+        <div>
+          <label for="name" class="block text-gray-700 font-medium mb-2 font-rubik">Nombre Completo</label>
+          <input
+            type="text"
+            id="name"
+            name="name"
+            [(ngModel)]="userregister.name"
+            required
+            placeholder="Ingresa tu nombre completo"
+            class="w-full px-3 py-2.5 bg-gray-50 border border-gray-300 rounded-lg text-gray-800 placeholder-gray-500 focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 transition-all duration-300 font-rubik">
+        </div>
+        <div>
+          <label for="artistic_name" class="block text-gray-700 font-medium mb-2 font-rubik">Nombre Artístico</label>
+          <input
+            type="text"
+            id="artistic_name"
+            name="artistic_name"
+            [(ngModel)]="userregister.artistic_name"
+            placeholder="Ingresa tu nombre artístico (opcional)"
+            class="w-full px-3 py-2.5 bg-gray-50 border border-gray-300 rounded-lg text-gray-800 placeholder-gray-500 focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 transition-all duration-300 font-rubik">
+        </div>
       </div>
 
       <div class="mb-5">
-        <label for="artistic_name" class="block text-purple-200 font-medium mb-2 font-rubik">Nombre Artístico</label>
-        <input
-          type="text"
-          id="artistic_name"
-          name="artistic_name"
-          [(ngModel)]="userregister.artistic_name"
-          placeholder="Ingresa tu nombre artístico (opcional)"
-          class="w-full px-3 py-2.5 bg-black/30 border border-purple-500/30 rounded-lg text-purple-100 placeholder-purple-300/50 focus:outline-none focus:border-purple-400 focus:ring-1 focus:ring-purple-400 transition-all duration-300 font-rubik">
-      </div>
-
-      <div class="mb-5">
-        <label for="email" class="block text-purple-200 font-medium mb-2 font-rubik">Email</label>
+        <label for="email" class="block text-gray-700 font-medium mb-2 font-rubik">Email</label>
         <input
           type="email"
           id="email"
@@ -94,71 +95,73 @@
           [(ngModel)]="userregister.email"
           required
           placeholder="Ingresa tu correo electrónico"
-          class="w-full px-3 py-2.5 bg-black/30 border border-purple-500/30 rounded-lg text-purple-100 placeholder-purple-300/50 focus:outline-none focus:border-purple-400 focus:ring-1 focus:ring-purple-400 transition-all duration-300 font-rubik">
+          class="w-full px-3 py-2.5 bg-gray-50 border border-gray-300 rounded-lg text-gray-800 placeholder-gray-500 focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 transition-all duration-300 font-rubik">
       </div>
 
-      <div class="mb-5">
-        <label for="password" class="block text-purple-200 font-medium mb-2 font-rubik">Contraseña</label>
-        <input
-          type="password"
-          id="password"
-          name="password"
-          [(ngModel)]="userregister.password"
-          required
-          placeholder="Crea una contraseña segura"
-          class="w-full px-3 py-2.5 bg-black/30 border border-purple-500/30 rounded-lg text-purple-100 placeholder-purple-300/50 focus:outline-none focus:border-purple-400 focus:ring-1 focus:ring-purple-400 transition-all duration-300 font-rubik">
+      <div class="grid grid-cols-2 gap-4 mb-5">
+        <div>
+          <label for="password" class="block text-gray-700 font-medium mb-2 font-rubik">Contraseña</label>
+          <input
+            type="password"
+            id="password"
+            name="password"
+            [(ngModel)]="userregister.password"
+            required
+            placeholder="Crea una contraseña segura"
+            class="w-full px-3 py-2.5 bg-gray-50 border border-gray-300 rounded-lg text-gray-800 placeholder-gray-500 focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 transition-all duration-300 font-rubik">
+        </div>
+        <div>
+          <label for="phone" class="block text-gray-700 font-medium mb-2 font-rubik">Teléfono</label>
+          <input
+            type="tel"
+            id="phone"
+            name="phone"
+            [(ngModel)]="userregister.phone"
+            required
+            placeholder="Ingresa tu número de teléfono"
+            class="w-full px-3 py-2.5 bg-gray-50 border border-gray-300 rounded-lg text-gray-800 placeholder-gray-500 focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 transition-all duration-300 font-rubik">
+        </div>
       </div>
 
-      <div class="mb-5">
-        <label for="phone" class="block text-purple-200 font-medium mb-2 font-rubik">Teléfono</label>
-        <input
-          type="tel"
-          id="phone"
-          name="phone"
-          [(ngModel)]="userregister.phone"
-          required
-          placeholder="Ingresa tu número de teléfono"
-          class="w-full px-3 py-2.5 bg-black/30 border border-purple-500/30 rounded-lg text-purple-100 placeholder-purple-300/50 focus:outline-none focus:border-purple-400 focus:ring-1 focus:ring-purple-400 transition-all duration-300 font-rubik">
-      </div>
-
-      <div class="mb-5">
-        <label for="location" class="block text-purple-200 font-medium mb-2 font-rubik">Localidad</label>
-        <input
-          type="text"
-          id="location"
-          name="location"
-          [(ngModel)]="userregister.location"
-          required
-          placeholder="Ingresa tu localidad"
-          class="w-full px-3 py-2.5 bg-black/30 border border-purple-500/30 rounded-lg text-purple-100 placeholder-purple-300/50 focus:outline-none focus:border-purple-400 focus:ring-1 focus:ring-purple-400 transition-all duration-300 font-rubik">
-      </div>
-
-      <div class="mb-5">
-        <label for="userType" class="block text-purple-200 font-medium mb-2 font-rubik">Tipo de Usuario</label>
-        <select
-          id="role"
-          name="role"
-          [(ngModel)]="userregister.role"
-          required
-          class="w-full px-3 py-2.5 bg-black/30 border border-purple-500/30 rounded-lg text-purple-100 focus:outline-none focus:border-purple-400 focus:ring-1 focus:ring-purple-400 transition-all duration-300 font-rubik">
-          <option value="" disabled selected>Selecciona tu tipo de usuario</option>
-          <option value="dj">DJ</option>
-          <option value="agency">Agencia</option>
-          <option value="client">Cliente</option>
-        </select>
+      <div class="grid grid-cols-2 gap-4 mb-5">
+        <div>
+          <label for="location" class="block text-gray-700 font-medium mb-2 font-rubik">Localidad</label>
+          <input
+            type="text"
+            id="location"
+            name="location"
+            [(ngModel)]="userregister.location"
+            required
+            placeholder="Ingresa tu localidad"
+            class="w-full px-3 py-2.5 bg-gray-50 border border-gray-300 rounded-lg text-gray-800 placeholder-gray-500 focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 transition-all duration-300 font-rubik">
+        </div>
+        <div>
+          <label for="userType" class="block text-gray-700 font-medium mb-2 font-rubik">Tipo de Usuario</label>
+          <select
+            id="role"
+            name="role"
+            [(ngModel)]="userregister.role"
+            required
+            class="w-full px-3 py-2.5 bg-gray-50 border border-gray-300 rounded-lg text-gray-800 focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 transition-all duration-300 font-rubik">
+            <option value="" disabled selected>Selecciona tu tipo de usuario</option>
+            <option value="dj">DJ</option>
+            <option value="agency">Agencia</option>
+            <option value="client">Cliente</option>
+          </select>
+        </div>
       </div>
 
       <button
         type="submit"
         [disabled]="!registerForm.form.valid"
-        class="w-full py-3 bg-gradient-to-r from-purple-600 to-pink-600 text-white rounded-lg font-medium transition-all duration-300 hover:from-purple-500 hover:to-pink-500 disabled:from-gray-600 disabled:to-gray-600 disabled:cursor-not-allowed transform hover:scale-[1.02] active:scale-[0.98] font-rubik">
+        class="w-full py-3 bg-gradient-to-r from-indigo-600 to-purple-600 text-white rounded-lg font-medium transition-all duration-300 hover:from-indigo-500 hover:to-purple-500 disabled:from-gray-400 disabled:to-gray-400 disabled:cursor-not-allowed transform hover:scale-[1.02] active:scale-[0.98] font-rubik">
         Registrarse
       </button>
       <div class="mt-4 text-center">
-        <span *ngIf="isRegisterFailed && errorMessage" class="text-red-400 font-rubik text-sm bg-red-900/20 px-4 py-2 rounded-lg border border-red-500/20">
+        <span *ngIf="isRegisterFailed && errorMessage" class="text-red-600 font-rubik text-sm bg-red-100 px-4 py-2 rounded-lg border border-red-200">
           {{ errorMessage }}
         </span>
-        <span *ngIf="!isRegisterFailed && successMessage" class="text-green-400 font-rubik text-sm bg-green-900/20 px-4 py-2 rounded-lg border border-green-500/20">
+        <span *ngIf="!isRegisterFailed && successMessage" class="text-green-600 font-rubik text-sm bg-green-100 px-4 py-2 rounded-lg border border-green-200">
           {{ successMessage }}
         </span>
       </div>

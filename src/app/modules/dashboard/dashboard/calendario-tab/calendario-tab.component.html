@@ -1,0 +1,136 @@
+<div class="space-y-6">
+  <div class="bg-white/90 backdrop-blur-lg rounded-xl p-6 border border-indigo-200 shadow-lg">
+    <!-- Header con navegación del mes -->
+    <div class="flex items-center justify-between mb-6">
+      <h3 class="text-xl font-bold text-gray-800 font-rubik">📅 Calendario</h3>
+
+      <!-- Navegación de meses -->
+      <div class="flex items-center space-x-4">
+        <button
+          (click)="previousMonth()"
+          class="p-2 text-indigo-600 hover:bg-indigo-100 rounded-lg transition-all duration-300 cursor-pointer">
+          <span class="text-lg">⬅️</span>
+        </button>
+
+        <h4 class="text-lg font-semibold text-gray-800 font-rubik">
+          {{ currentMonthName }} {{ currentYear }}
+        </h4>
+
+        <button
+          (click)="nextMonth()"
+          class="p-2 text-indigo-600 hover:bg-indigo-100 rounded-lg transition-all duration-300 cursor-pointer">
+          <span class="text-lg">➡️</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- Calendario -->
+    <div class="bg-white rounded-lg border border-gray-200 overflow-hidden">
+      <!-- Días de la semana -->
+      <div class="grid grid-cols-7 bg-indigo-50 border-b border-gray-200">
+        <div class="p-3 text-center font-semibold text-indigo-700 font-rubik">Lunes</div>
+        <div class="p-3 text-center font-semibold text-indigo-700 font-rubik">Martes</div>
+        <div class="p-3 text-center font-semibold text-indigo-700 font-rubik">Miércoles</div>
+        <div class="p-3 text-center font-semibold text-indigo-700 font-rubik">Jueves</div>
+        <div class="p-3 text-center font-semibold text-indigo-700 font-rubik">Viernes</div>
+        <div class="p-3 text-center font-semibold text-indigo-700 font-rubik">Sábado</div>
+        <div class="p-3 text-center font-semibold text-indigo-700 font-rubik">Domingo</div>
+      </div>
+
+      <!-- Días del mes -->
+      <div class="grid grid-cols-7">
+        <div *ngFor="let day of calendarDays"
+             class="min-h-[120px] border-r border-b border-gray-200 p-2 relative"
+             [ngClass]="{
+               'bg-gray-50': !day.isCurrentMonth,
+               'bg-white': day.isCurrentMonth,
+               'bg-indigo-50': day.isToday
+             }">
+
+          <!-- Número del día -->
+          <div class="flex justify-between items-start mb-2">
+            <span class="text-sm font-medium font-rubik"
+                  [ngClass]="{
+                    'text-gray-400': !day.isCurrentMonth,
+                    'text-gray-800': day.isCurrentMonth && !day.isToday,
+                    'text-indigo-600 font-bold': day.isToday
+                  }">
+              {{ day.dayNumber }}
+            </span>
+
+            <!-- Indicador de eventos -->
+            <div *ngIf="day.eventCount > 0"
+                 class="w-2 h-2 bg-indigo-500 rounded-full"></div>
+          </div>
+
+          <!-- Eventos del día -->
+          <div class="space-y-1">
+            <div *ngFor="let event of day.events"
+                 class="text-xs p-1 rounded bg-indigo-100 text-indigo-800 font-rubik cursor-pointer hover:bg-indigo-200 transition-colors"
+                 (click)="openEventModal(event)">
+              <div class="font-medium truncate">{{ event.name }}</div>
+              <div class="text-indigo-600">{{ event.start }}</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Información adicional -->
+    <div class="mt-4 flex items-center justify-between text-sm text-gray-600 font-rubik">
+      <div class="flex items-center space-x-4">
+        <div class="flex items-center space-x-2">
+          <div class="w-3 h-3 bg-indigo-500 rounded-full"></div>
+          <span>Eventos programados</span>
+        </div>
+        <div class="flex items-center space-x-2">
+          <div class="w-3 h-3 bg-indigo-50 rounded-full border border-indigo-200"></div>
+          <span>Hoy</span>
+        </div>
+      </div>
+
+      <div class="text-right">
+        <p>Total de eventos este mes: {{ totalEventsThisMonth }}</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal para ver evento -->
+<div *ngIf="showEventModal" class="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50">
+  <div class="bg-white/95 border border-indigo-200 rounded-xl p-8 max-w-2xl w-full mx-4 relative shadow-2xl">
+    <!-- Botón cerrar -->
+    <button (click)="closeEventModal()" class="absolute top-4 right-4 text-gray-500 hover:text-gray-700">
+      <span class="text-xl">❌</span>
+    </button>
+
+    <!-- Contenido del modal -->
+    <div *ngIf="selectedEvent" class="space-y-4">
+      <h2 class="text-2xl font-bold text-gray-800 font-rubik">{{ selectedEvent.name }}</h2>
+
+      <div class="grid grid-cols-2 gap-4 text-sm">
+        <div>
+          <span class="font-semibold text-gray-700 font-rubik">Fecha:</span>
+          <span class="text-gray-600">{{ selectedEvent.date | date:'dd/MM/yyyy' }}</span>
+        </div>
+        <div>
+          <span class="font-semibold text-gray-700 font-rubik">Horario:</span>
+          <span class="text-gray-600">{{ selectedEvent.start }} - {{ selectedEvent.end }}</span>
+        </div>
+        <div>
+          <span class="font-semibold text-gray-700 font-rubik">Lugar:</span>
+          <span class="text-gray-600">{{ selectedEvent.address }}, {{ selectedEvent.city }}</span>
+        </div>
+        <div>
+          <span class="font-semibold text-gray-700 font-rubik">Tipo:</span>
+          <span class="text-gray-600">{{ selectedEvent.type }}</span>
+        </div>
+      </div>
+
+      <div *ngIf="selectedEvent.observations">
+        <span class="font-semibold text-gray-700 font-rubik">Observaciones:</span>
+        <p class="text-gray-600 mt-1">{{ selectedEvent.observations }}</p>
+      </div>
+    </div>
+  </div>
+</div>

@@ -19,6 +19,7 @@ export interface LoggedUser {
   providedIn: 'root'
 })
 export class AuthStoreService {
+  [x: string]: any;
   private userSubject = new BehaviorSubject<LoggedUser | null>(null);
   public user$: Observable<LoggedUser | null> = this.userSubject.asObservable();
   private isBrowser: boolean;
